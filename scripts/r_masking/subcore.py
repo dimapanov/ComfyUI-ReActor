@@ -1,6 +1,8 @@
 import numpy as np
 import cv2
 from PIL import Image
+import torch
+import collections
 
 import scripts.r_masking.core as core
 from reactor_utils import tensor_to_pil
@@ -13,6 +15,41 @@ except Exception as e:
 
 def load_yolo(model_path: str):
     try:
+        # Добавляем безопасные глобалы для ultralytics моделей
+        torch.serialization.add_safe_globals([
+            "ultralytics.nn.tasks.DetectionModel",
+            "ultralytics.nn.modules.Conv",
+            "ultralytics.nn.modules.C2f",
+            "ultralytics.nn.modules.SPPF",
+            "ultralytics.nn.modules.Detect",
+            "ultralytics.nn.modules.DFL",
+            "ultralytics.nn.modules.Bottleneck",
+            "ultralytics.nn.modules.C3",
+            "ultralytics.nn.modules.C3TR",
+            "ultralytics.nn.modules.C3Ghost",
+            "ultralytics.nn.modules.C3x",
+            "ultralytics.nn.modules.Concat",
+            "ultralytics.nn.modules.Conv2",
+            "ultralytics.nn.modules.ConvTranspose",
+            "ultralytics.nn.modules.DWConv",
+            "ultralytics.nn.modules.DWConvTranspose2d",
+            "ultralytics.nn.modules.Focus",
+            "ultralytics.nn.modules.GhostBottleneck",
+            "ultralytics.nn.modules.GhostConv",
+            "ultralytics.nn.modules.HGBlock",
+            "ultralytics.nn.modules.HGStem",
+            "ultralytics.nn.modules.SPP",
+            "ultralytics.nn.modules.RepC3",
+            "ultralytics.nn.modules.RepConv",
+            "ultralytics.nn.modules.RepNCSPELAN4",
+            "torch.nn.modules.activation.SiLU",
+            "torch.nn.modules.batchnorm.BatchNorm2d",
+            "torch.nn.modules.conv.Conv2d",
+            "torch.nn.modules.linear.Linear",
+            "torch.nn.modules.pooling.MaxPool2d",
+            "torch.nn.modules.upsampling.Upsample",
+            "collections.OrderedDict",
+        ])
         return YOLO(model_path)
     except ModuleNotFoundError:
         # https://github.com/ultralytics/ultralytics/issues/3856

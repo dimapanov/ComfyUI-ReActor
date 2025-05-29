@@ -210,7 +210,7 @@ class reactor:
                     n_layers=9,
                     connect_list=["32", "64", "128", "256"],
                 ).to(device)
-                checkpoint = torch.load(model_path)["params_ema"]
+                checkpoint = torch.load(model_path, weights_only=False)["params_ema"]
                 codeformer_net.load_state_dict(checkpoint)
                 facerestore_model = codeformer_net.eval()
 
